@@ -1,0 +1,113 @@
+	<style>
+	
+	#container {
+		position: relative;
+		width: 430px;
+	}
+		
+		div#simpleview ul#nav {
+			display: block;
+			list-style: none;
+			position: relative; top: 100px; z-index: 20;
+		}
+		div#simpleview ul#nav li#prev {
+			float: left; margin: 0 0 0 -35px;
+		}
+		div#simpleview ul#nav li#next {
+			float: right; margin: 0 5px 0 0;
+		}
+		div#simpleview ul#nav li a {
+			display: block; width: 27px; height: 48px; text-indent: -9999px;
+		}
+		div#simpleview ul#nav li#prev a {
+			background: url('images/nav_left.png');
+		}
+		div#simpleview ul#nav li#prev a:hover {
+			background: url('images/on_nav_left.png');
+		}
+		div#simpleview ul#nav li#next a {
+			background: url('images/nav_right.png');
+		}
+		div#simpleview ul#nav li#next a:hover {
+			background: url('images/on_nav_right.png');
+		}
+	
+		#header {
+			background: url('images/top-black.png') no-repeat;
+			width: 430px;
+			height: 35px;
+			text-align: center;
+			color: #eee;
+			font-family: verdana;
+			font-size: 12px;
+			font-weight: bold;
+			z-index: 20;
+			position: relative;
+		}
+		
+		#slideimg {
+			position: relative;
+			top: -11px;
+		}
+
+		div#slidedesc {
+			top: -11px;
+			position: relative;
+			background-color: #171717;
+			color: #fff;
+			vertical-align: middle;
+			font-family: verdana, arial, sans-serif;
+			padding-top: 2px;
+			padding-bottom: 2px;
+			padding-left: 5px;
+			font-size: 11px;
+			}
+		
+		table#tblhead {
+			border-collapse: 0;
+			border-spacing: 0;
+			padding: 0;
+			margin: 0;
+			width: 430px;
+		}
+		td#navleft {
+			width: 100px;
+			vertical-align: baseline;
+			text-align: left;
+			font-size: 11px;
+			color: #fff;
+			text-decoration: none;
+			font-family: verdana, arial, sans-serif;
+			padding: 0;
+		}
+		td#navcenter {
+			width: 230px;
+			height: 25px;
+			font-size: 11px;
+			vertical-align: middle;
+			color: #fff;
+			text-align: center;
+			text-decoration: none;
+			text-transform: uppercase;
+			font-weight: bold;
+			font-family: verdana, arial, sans-serif;
+		}
+		td#navleft img {
+			
+		}
+		td#navright {
+			width: 100px;
+			vertical-align: baseline;
+			text-align: right;
+			font-size: 11px;
+			color: #fff;
+			text-decoration: none;
+			font-family: verdana, arial, sans-serif;
+		}
+		td#navleft a, td#navleft a:visited, td#navleft a:hover, td#navright a, td#navright a:visited, td#navright a:hover {
+			border: 0;
+			color: #fff;
+			text-decoration: none;
+		}
+	</style>
+
