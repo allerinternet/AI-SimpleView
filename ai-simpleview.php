@@ -91,8 +91,8 @@ function aisimpleview_shortcode( $atts ) {
 		'id' => '',
 		'size' => '',
 	), $atts));
-	$content .= "<iframe id='slideframe' scrolling='no' src='" . trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) ) . "/presenter.php?id=";
-	$content .= $id . "' frameborder='0' style='width: 430px; overflow: hidden; margin-top: 15px; margin-bottom: 15px'></iframe>";
+	$content .= "<iframe id='" . $id . "' scrolling='no' src='" . trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) ) . "/presenter.php?id=";
+	$content .= $id . "' frameborder='1' style='width: 430px;height:345px; overflow: hidden; margin-top: 15px; margin-bottom: 15px'></iframe>";
 	
 	//	<iframe scrolling='no' src='/public/templates/v3bildspel.aspx?id=674779&fid=674730&level=0&h=415&w=435&first=true' frameborder='0' style='overflow:hidden;'></iframe>
 	return $content;
@@ -690,9 +690,11 @@ function aisv_get_preview($content, $blog, $w = 125, $h = 96 ) {
 		$updir = str_replace( get_bloginfo('url'), '', $updir ); 
 		$table = $wpdb->prefix."ai_simpleview_images";
 		$r = $wpdb->get_row( "SELECT * FROM $table WHERE slideshow_id='$id' AND deleted='0' LIMIT 1" );
-		return "<img src='/images/timthumb".$updir.$r->file_name."&w=".$w."&h=".$h."&b=".$blog."' alt='slideshow' border='0' />";
+		$image = $updir.urlencode($r->file_name);
+		return "<img src='/images/timthumb".$image."&w=".$w."&h=".$h."&b=".$blog."&a=b' alt='slideshow' border='0' />";
 	} else {
 		return false;
 	}
+	
 
 }

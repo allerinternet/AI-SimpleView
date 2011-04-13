@@ -17,14 +17,14 @@ $result = $wpdb->get_row( $sql );
 $updir = get_option('fileupload_url').'/ai-simpleview/'.$id.'/';
 $img_src = $updir . $result->file_name;
 if ( $image > 0 ) {
-	$img_nav_left = "<a href='presenter.php?id=".$id."&amp;i=".($image-1)."' onclick=''><img src='images/prev.png' alt='.' style='border: 0' /></a>";
+	$img_nav_left = "<a href='presenter.php?id=".$id."&amp;i=".($image-1)."' onclick='ReloadAds();'><img src='images/prev.png' alt='.' style='border: 0' /></a>";
 } else {
 	$img_nav_left = " ";
 }
 
 
 if ( $image < $SV->count_images( $id )-1 ) {
-	$img_nav_right = "<a href='presenter.php?id=".$id."&amp;i=".($image+1)."' onclick=''><img src='images/next.png' alt='.' style='border: 0' /></a>";
+	$img_nav_right = "<a href='presenter.php?id=".$id."&amp;i=".($image+1)."' onclick='ReloadAds();'><img src='images/next.png' alt='.' style='border: 0' /></a>";
 } else {
 	$img_nav_right = " ";
 }
@@ -40,10 +40,10 @@ function ReloadAds () {
     foo.contentWindow.location.reload(true);
     var bar = window.parent.document.getElementById('header-ads');
     bar.contentWindow.location.reload(true);
-    var tile14 = window.parent.document.getElementById('ads-tile14');
-    var tile15 = window.parent.document.getElementById('ads-tile15');
-    tile14.contentWindow.location.reload(true);
-    tile15.contentWindow.location.reload(true);
+//    var tile14 = window.parent.document.getElementById('ads-tile14');
+  //  var tile15 = window.parent.document.getElementById('ads-tile15');
+//    tile14.contentWindow.location.reload(true);
+  //  tile15.contentWindow.location.reload(true);
 }
 
 $.getDocHeight = function() {
@@ -84,12 +84,12 @@ $('document').ready(function() {
 
 });
 
-var D = window.parent.document.getElementById('slideframe');
-D.style.height = 250 +'px';
+//var D = window.parent.document.getElementById('slideframe');
+//D.style.height = 250 +'px';
 </script>
 
 </head>
-<body onload="javascript: ReloadAds();" style="margin: 0; padding: 0;">
+<body style="margin: 0; padding: 0;">
 <div id="container">
 		<div id="header">
 			<table id="tblhead" border="0">
@@ -103,9 +103,9 @@ D.style.height = 250 +'px';
 			<div id="slideimg">
 		<?php
 			if ( $image < $SV->count_images($id)-1 ) {
-				echo "<a href='presenter.php?id=".$id."&amp;i=".($image+1)."' onclick=''>";
+				echo "<a href='presenter.php?id=".$id."&amp;i=".($image+1)."' onclick='ReloadAds();'>";
 			}
-		?><img src="<?php echo $img_src; ?>" onload="try{window.parent.setSize(window.self, this.height+60);} catch (err){}" style='z-index: 9999; width: 430px; border: 0' border='0' /><?php
+		?><img src="<?php echo $img_src; ?>" onload="try{window.parent.setSize(window.self, this.height+60, <?php echo $id; ?>);} catch (err){if(window.console){console.log(err);}}" style='z-index: 9999; width: 430px; border: 0' border='0' /><?php
 			if ( $image < $SV->count_images($id)-1 ) {
 				echo "</a>";
 			}
@@ -113,7 +113,7 @@ D.style.height = 250 +'px';
 		</div>
 	<?php
 		if ( strlen($result->description) ) {
-			echo "<div id='slidedesc'>".$result->description."</div>\n";
+			echo "<div id='slidedesc'>".$result-description."</div>\n";
 		}
 	?>
 </div>
