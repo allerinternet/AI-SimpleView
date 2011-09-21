@@ -113,7 +113,7 @@ $('document').ready(function() {
 		</div>
 	<?php
 		if ( strlen($result->description) ) {
-			echo "<div id='slidedesc'>".$result-description."</div>\n";
+			echo "<div id='slidedesc'>".$result->description."</div>\n";
 		}
 	?>
 </div>
