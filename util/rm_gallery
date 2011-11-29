@@ -1,0 +1,4 @@
+#/bin/bash
+rm -rf /var/www/wpmu/wp-content/blogs.dir/36/files/gallery
+mkdir /var/www/wpmu/wp-content/blogs.dir/36/files/gallery
+mysql -upetter12gamers -pkd7rbfjY wpmuslim < ~/wpmu_36.sql

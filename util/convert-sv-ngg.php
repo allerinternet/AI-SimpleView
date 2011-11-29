@@ -1,26 +1,19 @@
 <?php
-// Load MyBackup for database backup, if we have class.
-$db_backup = FALSE;
-if (file_exists('MyBackup.php')) {
-	require_once('MyBackup.php');
-	$db_backup = TRUE;
-} else {
-	printf("\n\n!!! Did not find MyBackup. Can not backup your database in script. Do it manually.\n");
-	sleep(2);
-}
+
+$webroot = '/var/www/wpmu/';
 
 // wp-bootstrap
-define('SITE_NAME', 'cafe.se.allerinternet.net');	// wp-bootstrap
+define('SITE_NAME', 'cafe.se');	// wp-bootstrap
 $_SERVER['HTTP_HOST'] = SITE_NAME;
-require_once("/var/www/wpmu/wp-load.php");
+require_once($webroot . "/wp-load.php");
 //require_once("galimp.php");
 
 // For NextGen Gallery
-define("ORIG_DIR", "/var/www/wpmu/wp-content/blogs.dir/%d/files/ai-simpleview/%d/");
+define("ORIG_DIR", $webroot . "wp-content/blogs.dir/%d/files/ai-simpleview/%d/");
 define("OWNER", "nginx");
 define("USER_ID", 1);
-define("BASEDIR", "/var/www/wpmu/");
-require_once("/var/www/wpmu/wp-content/plugins/nextgen-gallery/admin/functions.php");
+define("BASEDIR", $webroot);
+require_once($webroot . "wp-content/plugins/nextgen-gallery/admin/functions.php");
 
 /**
 * Get images from a slideshow, returns an array
@@ -165,8 +158,10 @@ function create_gallery($name = NULL, $folder = NULL)
 	$gallery_name = apply_filters('ngg_gallery_name', $name);	
 
 	// TODO: gallery_folder finns inte, måste skapa en katalog för bilderna
-	$gallery_folder = $folder;
-	$result = $wpdb->query( $wpdb->prepare("INSERT INTO $wpdb->nggallery(name, path, title, author) VALUES(%s, %s, %s, %s)", $gallery_name, $gallery_folder, $gallery_name, USER_ID));
+        global $webroot;
+
+	$gallery_folder = str_replace($webroot, '', $folder);
+	$result = $wpdb->query( $wpdb->prepare("INSERT INTO $wpdb->nggallery(name, path, title, author, galdesc) VALUES(%s, %s, %s, %s, %s)", $gallery_name, $gallery_folder, $gallery_name, USER_ID, $gallery_name));
 	if (!$result) {
 		printf("Error: Could not create gallery %s", $gallery_name);
 		return FALSE;
@@ -175,6 +170,8 @@ function create_gallery($name = NULL, $folder = NULL)
 
 	foreach ($gallery_images as $gi) {
 		$result = $wpdb->query( $wpdb->prepare("INSERT INTO $wpdb->nggpictures(galleryid, filename, alttext) VALUES(%s, %s, %s)", $gallery_id, $gi,$gi) );
+                nggAdmin::import_MetaData(array($wpdb->insert_id));
+                
 		if (!$result) {
 			printf("Error: Could not add image %s in gallery %s.\n", $gi, $gallery_id);
 		} else {
@@ -227,11 +224,11 @@ if ($db_backup) {
 	$data = $mb->database_backup('/tmp/convert-'.time());
 }
 
-// Find slideshows in blog
-$slideshows = slideshow_find();
 
-if($slideshows) {
-	foreach($slideshows as $s) {
+
+function test($s, &$doublettes, &$counter) {
+global $wpdb;
+                $counter++;
 		$id_post = $s['post_id'];
 		$id_slideshow = $s['slideshow_id'];
 		printf("post: %d - slideshow_id: %d\n", $id_post, $id_slideshow);
@@ -242,7 +239,13 @@ if($slideshows) {
 		// Get the meta data from original slideshow
 		$slide_show = slideshow_get($id_slideshow);
 		$name_slideshow = $slide_show['slide_name'];
-
+                if(in_array($name_slideshow, $doublettes)) {
+                  $name_slideshow .= '__' . $counter;
+                  array_push($doublettes, $name_slideshow);
+                }
+	        else {
+                  array_push($doublettes, $name_slideshow);
+                }
 		// Copy image files from old to new directory
 		$orig_dir = sprintf(ORIG_DIR, $wpdb->blogid, $id_slideshow);
 		$copy_files = gallery_copy_files($orig_dir, $name_slideshow);
@@ -257,6 +260,18 @@ if($slideshows) {
 		if ($update == 0) {
 			printf("ERROR: Could not update post with id: %d\n", $id_post);
 		}
+$wpdb->flush();
+}
+
+
+// Find slideshows in blog
+$slideshows = slideshow_find();
+
+if($slideshows) {
+        $doublettes = array();
+        $counter = 0;
+	foreach($slideshows as $s) {
+          test($s, $doublettes, $counter);
 	}
 }
 
